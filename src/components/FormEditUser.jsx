@@ -1,8 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const FormAddUser = () => {
+const FormEditUser = () => {
+
+    const [isLoading, setLoading] = useState(false);
+    const [msg, setMsg] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -10,22 +14,43 @@ const FormAddUser = () => {
     const [confPass, setConfPass] = useState('');
     const [role, setRole] = useState('');
 
-    const [isLoading, setLoading] = useState(false);
-    const [msg, setMsg] = useState('');
-    const [showAlert, setShowAlert] = useState(false);
+    const { id } = useParams();
+    const navigate = useNavigate();
 
     const alertFn = () => {
         setShowAlert(!showAlert)
     }
 
-    const navigate = useNavigate();
+    const reset = () => {
+        setName('')
+        setEmail('')
+        setPassword('')
+        setConfPass('')
+        setRole('admin')
+    }
+    
+    useEffect(() => {
+        const getUsersId = async () => {
+            try {
+                const response = await axios.get('http://localhost:3002/users/' + id)
+                setName(response.data.name)
+                setEmail(response.data.email)
+                setRole(response.data.role)
+            } catch (error) {
+                if (error.response) {
+                    setMsg(error.response.msg)
+                }
+            }
+        }
+        getUsersId();
+    }, [id])
 
-    const saveUser = async (e) => {
+    const updateUsers = async (e) => {
         e.preventDefault();
-        setLoading(!isLoading);
+        setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:3002/users', {
+            const response = await axios.patch('http://localhost:3002/users/' +id, {
                 name: name,
                 email: email,
                 password: password,
@@ -47,36 +72,26 @@ const FormAddUser = () => {
         }
     }
 
-    const reset = () => {
-        setName('')
-        setEmail('')
-        setPassword('')
-        setConfPass('')
-        setRole('admin')
-    }
-    
-
     return (
         <div>
             <h1 className='title'>Users</h1>
-            <h2 className='subtitle'>add a new user</h2>
+            <h2 className='subtitle'>Edit users</h2>
 
             {
                 showAlert && (
                     <div>
                         <div className="notification is-danger mb-4">
                             <button className="delete" onClick={alertFn}></button>
-                            { msg }
+                            {msg}
                         </div>
                     </div>
                 )
             }
 
-
             <div className="card is-shadowless">
                 <div className="card-content">
                     <div className="content">
-                        <form onSubmit={saveUser}>
+                        <form onSubmit={updateUsers}>
                             <div className="field">
                                 <label htmlFor="name" className="label">Name</label>
                                 <div className="control">
@@ -124,4 +139,4 @@ const FormAddUser = () => {
     )
 }
 
-export default FormAddUser
+export default FormEditUser

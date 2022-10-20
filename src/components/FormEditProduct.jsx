@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const FormAddProduct = () => {
+const FormEditProduct = () => {
 
     const [showAlert, setShowAlert] = useState(false);
     const [showSuksesAlert, setSuksesAlert] = useState(false);
@@ -11,6 +12,8 @@ const FormAddProduct = () => {
 
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
+
+    const { id } = useParams();
 
     const alertFn = () => {
         setShowAlert(!showAlert)
@@ -25,22 +28,37 @@ const FormAddProduct = () => {
         setPrice('');
     }
 
-    const saveProduct = async (e) => {
+    useEffect(() => {
+        const getProductId = async () => {
+            try {
+                const response = await axios.get('http://localhost:3002/products/' + id)
+                setName(response.data.nameProduct)
+                setPrice(response.data.price)
+            } catch (error) {
+                if(error.response){
+                    setMsg(error.response.msg)
+                }
+            }
+        }
+        getProductId()
+    }, [id])
+
+    const updateProduct = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:3002/products', {
+            const response = await axios.patch('http://localhost:3002/products/' + id, {
                 name: name,
                 price: price
             })
-            if(response){
+            if (response) {
                 setLoading(false)
                 setMsg(response.data.msg)
                 setSuksesAlert(!showSuksesAlert)
             }
         } catch (error) {
-            if(error.response){
+            if (error.response) {
                 setLoading(false)
                 setMsg(error.response.data.msg)
                 setShowAlert(!showAlert)
@@ -51,14 +69,14 @@ const FormAddProduct = () => {
     return (
         <div>
             <h1 className='title'>Products</h1>
-            <h2 className='subtitle'>Add a new product</h2>
+            <h2 className='subtitle'>Edit product</h2>
 
             {
                 showAlert && (
                     <div>
                         <div className="notification is-danger mb-4">
                             <button className="delete" onClick={alertFn}></button>
-                            { msg }
+                            {msg}
                         </div>
                     </div>
                 )
@@ -69,7 +87,7 @@ const FormAddProduct = () => {
                     <div>
                         <div className="notification is-success mb-4">
                             <button className="delete" onClick={alertSuksesFn}></button>
-                            { msg }
+                            {msg}
                         </div>
                     </div>
                 )
@@ -78,7 +96,7 @@ const FormAddProduct = () => {
             <div className="card is-shadowless">
                 <div className="card-content">
                     <div className="content">
-                        <form onSubmit={saveProduct}>
+                        <form onSubmit={updateProduct}>
                             <div className="field">
                                 <label htmlFor="name" className="label">Name of product</label>
                                 <div className="control">
@@ -104,4 +122,4 @@ const FormAddProduct = () => {
     )
 }
 
-export default FormAddProduct
+export default FormEditProduct

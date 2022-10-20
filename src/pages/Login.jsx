@@ -3,12 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Modalku from '../components/Modalku'
 import { loginUser, reset } from '../features/authSlice'
-import { FaEnvelope } from 'react-icons/fa'
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const [showPass, setShowPass] = useState(false);
+
+    const showPassFunc = () => {
+        setShowPass(!showPass)
+    }
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,9 +38,9 @@ export const Login = () => {
 
     useEffect(() => {
         if (user && isSuccess) {
-            return navigate('/dashboard');
+            navigate('/dashboard');
         }
-        dispatch(reset())
+        // dispatch(reset())
     }, [user, isSuccess])
 
     return (
@@ -57,21 +63,27 @@ export const Login = () => {
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
-                                            <span class="icon is-small is-left">
-                                                <FaEnvelope/>
+                                            <span className="icon is-small is-left">
+                                                <FaEnvelope />
                                             </span>
                                         </div>
                                     </div>
                                     <div className='field'>
                                         <label htmlFor="password" className="label">Password</label>
-                                        <div className="control">
+                                        <div className="control has-icons-left has-icons-right">
                                             <input
-                                                type="password"
+                                                type={showPass ? "text" : "password"}
                                                 className="input"
                                                 placeholder='Your Password'
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
+                                            <span className="icon is-small is-left">
+                                                <FaLock />
+                                            </span>
+                                            <span className="icon is-small is-right" onClick={showPassFunc} style={{ pointerEvents: 'initial', cursor: 'pointer' }}>
+                                                {showPass ? <FaEyeSlash /> : <FaEye />}
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="field" style={{ marginTop: '2rem' }}>
