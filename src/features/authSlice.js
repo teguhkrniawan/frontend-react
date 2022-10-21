@@ -13,14 +13,14 @@ const initialState = {
 // request api login
 export const loginUser = createAsyncThunk("user/loginUser", async(user, thunkAPI) => {
     try {
-        const response = await axios.post('http://localhost:3002/login', {
+        const response = await axios.post('http://103.209.186.82:3002/login', {
             email: user.email,
             password: user.password
         })
 
         // const response = await 
         //     axios.post(
-        //         'http://localhost:3002/login', 
+        //         'http://103.209.186.82:3002/login', 
         //         {
         //             email: user.email,
         //             password: user.password
@@ -47,7 +47,7 @@ export const loginUser = createAsyncThunk("user/loginUser", async(user, thunkAPI
 // request profile user
 export const getMe = createAsyncThunk("user/me", async(_, thunkAPI) => {
     try {
-        const response = await axios.get('http://localhost:3002/me');
+        const response = await axios.get('http://103.209.186.82:3002/me');
         return response.data;
     } catch (error) {
         if(error.response){
@@ -59,7 +59,7 @@ export const getMe = createAsyncThunk("user/me", async(_, thunkAPI) => {
 
 // request logout
 export const logout = createAsyncThunk("user/logout", async(_, thunkAPI) => {
-    await axios.delete('http://localhost:3002/logout');
+    await axios.delete('http://103.209.186.82:3002/logout');
 });
 
 // redux auth

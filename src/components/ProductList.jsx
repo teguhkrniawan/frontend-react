@@ -27,13 +27,13 @@ export const ProductList = () => {
     //handle delete
     const deleteFn = async (uuid) => {
         console.log(uuid)
-        await axios.delete('http://localhost:3002/products/' +uuid);
+        await axios.delete('http://103.209.186.82:3002/products/' +uuid);
         getProduct();
     }
 
     // handle get product
     const getProduct = async () => {
-        const response = await axios.get('http://localhost:3002/products')
+        const response = await axios.get('http://103.209.186.82:3002/products')
         setOfListProduct(response.data);
     }
 

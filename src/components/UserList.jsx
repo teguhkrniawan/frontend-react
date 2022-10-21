@@ -9,14 +9,14 @@ export const UserList = () => {
     const [listUsers, setOfListUsers] = useState([]);
 
     const getUsers = async () => {
-        const response = await axios.get('http://localhost:3002/users');
+        const response = await axios.get('http://103.209.186.82:3002/users');
         setOfListUsers(response.data);
     }
 
      //handle delete
     const deleteFn = async (uuid) => {
         console.log(uuid)
-        await axios.delete('http://localhost:3002/users/' +uuid);
+        await axios.delete('http://103.209.186.82:3002/users/' +uuid);
         getUsers();
     }
 

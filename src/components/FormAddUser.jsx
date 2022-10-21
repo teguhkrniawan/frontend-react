@@ -25,7 +25,7 @@ const FormAddUser = () => {
         setLoading(!isLoading);
 
         try {
-            const response = await axios.post('http://localhost:3002/users', {
+            const response = await axios.post('http://103.209.186.82:3002/users', {
                 name: name,
                 email: email,
                 password: password,

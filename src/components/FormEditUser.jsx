@@ -32,7 +32,7 @@ const FormEditUser = () => {
     useEffect(() => {
         const getUsersId = async () => {
             try {
-                const response = await axios.get('http://localhost:3002/users/' + id)
+                const response = await axios.get('http://103.209.186.82:3002/users/' + id)
                 setName(response.data.name)
                 setEmail(response.data.email)
                 setRole(response.data.role)
@@ -50,7 +50,7 @@ const FormEditUser = () => {
         setLoading(true);
 
         try {
-            const response = await axios.patch('http://localhost:3002/users/' +id, {
+            const response = await axios.patch('http://103.209.186.82:3002/users/' +id, {
                 name: name,
                 email: email,
                 password: password,

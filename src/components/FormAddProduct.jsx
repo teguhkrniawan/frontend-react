@@ -30,7 +30,7 @@ const FormAddProduct = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:3002/products', {
+            const response = await axios.post('http://103.209.186.82:3002/products', {
                 name: name,
                 price: price
             })

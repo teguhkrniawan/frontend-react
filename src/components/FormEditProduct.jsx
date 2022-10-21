@@ -31,7 +31,7 @@ const FormEditProduct = () => {
     useEffect(() => {
         const getProductId = async () => {
             try {
-                const response = await axios.get('http://localhost:3002/products/' + id)
+                const response = await axios.get('http://103.209.186.82:3002/products/' + id)
                 setName(response.data.nameProduct)
                 setPrice(response.data.price)
             } catch (error) {
@@ -48,7 +48,7 @@ const FormEditProduct = () => {
         setLoading(true);
 
         try {
-            const response = await axios.patch('http://localhost:3002/products/' + id, {
+            const response = await axios.patch('http://103.209.186.82:3002/products/' + id, {
                 name: name,
                 price: price
             })
